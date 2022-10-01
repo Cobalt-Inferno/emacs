@@ -25,7 +25,7 @@
  ;; If there is more than one, they won't work right.
  '(helm-minibuffer-history-key "M-p")
  '(package-selected-packages
-   '(which-key dap-mode lsp-treemacs lsp-ivy helm-lsp lsp-ui lsp-mode tree-sitter-langs tree-sitter neotree projectile all-the-icons beacon dirvish use-package)))
+   '(nord-theme catppuccin-theme dracula-theme dracula which-key dap-mode lsp-treemacs lsp-ivy helm-lsp lsp-ui lsp-mode tree-sitter-langs tree-sitter neotree projectile all-the-icons beacon dirvish use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

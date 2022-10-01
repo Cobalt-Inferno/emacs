@@ -6,10 +6,11 @@
 (require 'tree-sitter-langs)
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
-
+(setq use-short-answers t)
+;; theme
 (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t)
-(load-theme 'doom-one t)
+(load-theme 'dracula t)
 (add-to-list 'default-frame-alist '(font . "Inconsolata-17"))
 ;; load with emacsclient
 (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
@@ -25,6 +26,13 @@
 (define-key evil-insert-state-map (kbd "C-c") 'evil-normal-state)
 (define-key evil-normal-state-map (kbd "C-c") 'evil-normal-state)
 (define-key key-translation-map (kbd "C-c C-c") (kbd "C-g"))
+
+;; Dump to .tmp
+(setq temporary-file-directory "~/.tmp/")
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
 
 
 ;; Save quit with evil, dont actually quit
@@ -76,3 +84,6 @@
             (define-key c-mode-map "(" 'electric-pair)
             (define-key c-mode-map "[" 'electric-pair)
             (define-key c-mode-map "{" 'electric-pair)))
+(setq-default auto-save-no-message t)
+;; ex
+(setq use-dialog-box nil)

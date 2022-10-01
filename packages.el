@@ -13,9 +13,17 @@
   :ensure t
   :config
   (evil-collection-init))
+;; projectile
 (use-package projectile
   :config
   (projectile-global-mode 1))
+;; themes
+(use-package dracula-theme
+  :ensure t)
+(use-package catppuccin-theme
+  :ensure t)
+(use-package nord-theme
+  :ensure t)
 ;; I like the doom themes
 (use-package doom-themes
   :ensure t)
