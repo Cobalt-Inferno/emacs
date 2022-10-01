@@ -2,14 +2,15 @@
 (require 'evil)
 (require 'general)
 (require 'beacon)
-
+(require 'tree-sitter)
+(require 'tree-sitter-langs)
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 
 (setq doom-themes-enable-bold t
 	doom-themes-enable-italic t)
 (load-theme 'doom-one t)
-(add-to-list 'default-frame-alist '(font . "Inconsolata-16"))
+(add-to-list 'default-frame-alist '(font . "Inconsolata-17"))
 ;; load with emacsclient
 (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
 ;; disable all menu bars
@@ -49,3 +50,29 @@
 
 ;; To disable shortcut "jump" indicators for each section, set
 
+;; treesitter langs
+(tree-sitter-require 'cpp)
+(tree-sitter-require 'c)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+
+;; lsp
+(setq lsp-log-io nil) ; if set to true can cause a performance hit
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+(setq company-minimum-prefix-length 1
+      company-idle-delay 0.0) ;; default is 0.2
+
+;; Autopair
+(defun electric-pair ()
+      "If at end of line, insert character pair without surrounding spaces.
+    Otherwise, just insert the typed character."
+  (interactive)
+  (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1)))
+(add-hook 'c-mode-hook
+          (lambda ()
+            (define-key c-mode-map "\"" 'electric-pair)
+            (define-key c-mode-map "\'" 'electric-pair)
+            (define-key c-mode-map "(" 'electric-pair)
+            (define-key c-mode-map "[" 'electric-pair)
+            (define-key c-mode-map "{" 'electric-pair)))
