@@ -32,10 +32,6 @@
 (dirvish-override-dired-mode)
 (use-package all-the-icons)
 ;; Or if you use use-package
-(use-package beacon
-  :ensure t
-  :config
-  (beacon-mode 1))
 (use-package general
   :ensure t
   :config
@@ -163,3 +159,6 @@
   (marginalia-mode))
 (use-package haskell-mode
   :ensure t)
+;; vterm
+(use-package vterm
+    :ensure t)

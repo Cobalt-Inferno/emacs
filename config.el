@@ -2,7 +2,6 @@
 (require 'evil)
 (require 'yasnippet)
 (require 'general)
-(require 'beacon)
 (require 'tree-sitter)
 (require 'tree-sitter-langs)
 (setq warning-minimum-level :emergency)
@@ -127,3 +126,13 @@
 (evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
 (evil-define-key 'normal neotree-mode-map (kbd "w") 'neotree-create-node)
 ;; tmp
+(custom-set-variables
+ ;; Customization related to indentation.
+ '(haskell-indentation-layout-offset 2)
+ '(haskell-indentation-starter-offset 2)
+ '(haskell-indentation-left-offset 2)
+ '(haskell-indentation-where-pre-offset 2)
+ '(haskell-indentation-where-post-offset 2)
+ )
+(define-key evil-normal-state-map "u" 'undo-tree-undo)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
