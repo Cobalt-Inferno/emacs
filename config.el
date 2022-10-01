@@ -30,10 +30,11 @@
 
 ;; Dump to .tmp
 (setq temporary-file-directory "~/.tmp/")
-(setq backup-directory-alist
+ (setq backup-directory-alist
       `((".*" . ,temporary-file-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" ,temporary-file-directory t)))
+;;(setq auto-save-file-name-transforms
+;;      `((".*" ,temporary-file-directory t)))
+(setq auto-save-default nil)
 
 
 ;; Save quit with evil, dont actually quit
