@@ -1,4 +1,4 @@
-;; Require blocks
+;;; Require blocks
 (require 'evil)
 (require 'yasnippet)
 (require 'general)
@@ -21,7 +21,7 @@
 (menu-bar-mode -1)
 (tab-bar-mode -1)
 (scroll-bar-mode -1) 
-
+   
 ; line numbers
 (setq display-line-numbers-type 'relative)
 ;; Map "C-c to C-g
@@ -56,11 +56,11 @@
 (setq sublimity-scroll-weight 5
       sublimity-scroll-drift-length 5)
 ;; for vim like tab
-(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
 	
 (yas-global-mode 1)
- (tree-sitter-require 'cpp)
+(tree-sitter-require 'cpp)
 (tree-sitter-require 'c)
+(tree-sitter-require 'haskell)
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
@@ -78,6 +78,28 @@
             (define-key c-mode-map "(" 'electric-pair)
             (define-key c-mode-map "[" 'electric-pair)
             (define-key c-mode-map "{" 'electric-pair)))
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (define-key lisp-mode-map "\"" 'electric-pair)
+            (define-key lisp-mode-map "\'" 'electric-pair)
+            (define-key lisp-mode-map "(" 'electric-pair)
+            (define-key lisp-mode-map "[" 'electric-pair)
+            (define-key lisp-mode-map "{" 'electric-pair)))
+(add-hook 'scheme-mode-hook
+          (lambda ()
+            (define-key scheme-mode-map "\"" 'electric-pair)
+            (define-key scheme-mode-map "\'" 'electric-pair)
+            (define-key scheme-mode-map "(" 'electric-pair)
+            (define-key scheme-mode-map "[" 'electric-pair)
+            (define-key scheme-mode-map "{" 'electric-pair)))
+(add-hook 'haskell-mode-hook
+          (lambda ()
+            (define-key haskell-mode-map "\"" 'electric-pair)
+            (define-key haskell-mode-map "\'" 'electric-pair)
+            (define-key haskell-mode-map "(" 'electric-pair)
+            (define-key haskell-mode-map "[" 'electric-pair)
+            (define-key haskell-mode-map "{" 'electric-pair)))
+
 (setq-default auto-save-no-message t)
 ;; ex
 (setq use-dialog-box nil)
@@ -90,3 +112,6 @@
       sublimity-scroll-drift-length 5)
 ;; for vim like tab
 (define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)      
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 2)
+(setq indent-line-function 'insert-tab)

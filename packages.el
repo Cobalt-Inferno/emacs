@@ -16,7 +16,7 @@
 ;; projectile
 (use-package projectile
   :config
-  (projectile-global-mode 1))
+  (projectile-mode 1))
 ;; themes
 (use-package dracula-theme
   :ensure t)
@@ -143,4 +143,23 @@
   :init
   (global-flycheck-mode t))
 (use-package yasnippet
+  :ensure t)
+(use-package vertico
+  :ensure t
+  :bind (:map vertico-map
+	      ("C-j" . vertico-next)
+	      ("C-k" . vertico-previous)
+	      ("C-f" . vertico-exit))
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
+(use-package haskell-mode
   :ensure t)
