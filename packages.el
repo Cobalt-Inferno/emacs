@@ -93,7 +93,9 @@
        "b n"   '(next-buffer :which-key "Next buffer")
        "b p"   '(previous-buffer :which-key "Previous buffer")
        "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
-       "b K"   '(kill-buffer :which-key "Kill buffer"))
+       "b K"   '(kill-buffer :which-key "Kill buffer")
+       "r f"   '(dashboard-refresh-buffer :which-key "Refresh buffer"))
+
 
 (use-package dashboard
   :init      ;; tweak dashboard config before loading it
@@ -145,3 +147,8 @@
 (use-package which-key
     :config
     (which-key-mode))
+;; for smooth scrolling
+(use-package sublimity
+  :ensure t
+  :config
+  (sublimity-mode 1))

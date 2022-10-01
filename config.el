@@ -4,6 +4,7 @@
 (require 'beacon)
 (require 'tree-sitter)
 (require 'tree-sitter-langs)
+(setq warning-minimum-level :emergency)
 (when (version<= "26.0.50" emacs-version )
   (global-display-line-numbers-mode))
 (setq use-short-answers t)
@@ -87,3 +88,12 @@
 (setq-default auto-save-no-message t)
 ;; ex
 (setq use-dialog-box nil)
+;; simple fix
+(setq kill-buffer-query-functions
+  (remq 'process-kill-buffer-query-function
+         kill-buffer-query-functions))
+;; smooth scrolling
+(setq sublimity-scroll-weight 5
+      sublimity-scroll-drift-length 5)
+;; for vim like tab
+(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
