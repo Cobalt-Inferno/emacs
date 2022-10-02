@@ -56,13 +56,24 @@ Here we can also override dired by using this configuration
 #+BEGIN_SRC emacs-lisp
 (dirvish-override-dired-mode)
 #+END_SRC
-** General 
+** General
 General gives us some nice features for other packages.
 #+BEGIN_SRC emacs-lisp
 (use-package general
   :ensure t
   :config
   (general-evil-setup t))
+#+END_SRC
+** All The Icons
+Just a simple icon plugin
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons)
+#+END_SRC
+** Projectile
+#+BEGIN_SRC emacs-lisp
+(use-package projectile
+  :config
+  (projectile-global-mode 1))
 #+END_SRC
 ** Neotree
 Neotree is a plugin that gives us a nice little "file manager" on the side of emacs.
@@ -76,15 +87,16 @@ Here we can enable some nice defaults
   neo-window-width 35
   neo-theme (if (display-graphic-p) 'icons 'arrow)
   inhibit-compacting-font-caches t
-  projectile-switch-project-action 'neotree-projectile-action) 
+  projectile-switch-project-action 'neotree-projectile-action)
   (add-hook 'neo-after-create-hook
     #'(lambda (_)
       (with-current-buffer (get-buffer neo-buffer-name)
       (setq truncate-lines t)
       (setq word-wrap nil)
       (make-local-variable 'auto-hscroll-mode)
-      (setq auto-hscroll-mode nil)))))
+      (setq auto-hscroll-mode nil))))
 (defcustom neo-window-width 25
+"*Specifies the width of the NeoTree window."
   :type 'integer
   :group 'neotree)
 (setq-default neo-show-hidden-files t)
@@ -199,14 +211,14 @@ Here we can also just enable org bullets for org files.
 ** General configurations
 *** Disable backup files
 #+BEGIN_SRC emacs-lisp
-(setq make-backup-files nil) 
+(setq make-backup-files nil)
 #+END_SRC
 *** Disabling bars
 #+BEGIN_SRC emacs-lisp
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (tab-bar-mode -1)
-(scroll-bar-mode -1) 
+(scroll-bar-mode -1)
 #+END_SRC
 *** Setting Font and themes
 #+BEGIN_SRC emacs-lisp
@@ -250,7 +262,7 @@ Here we can also just enable org bullets for org files.
 #+END_SRC
 *** Vim like insert TABs
 #+BEGIN_SRC emacs-lisp
-(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)      
+(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)
 #+END_SRC
 *** Tabs
 #+BEGIN_SRC emacs-lisp
@@ -259,6 +271,37 @@ Here we can also just enable org bullets for org files.
 (setq indent-line-function 'insert-tab)
 #+END_SRC
 ** General Keybinds
+*** C-c remap
+I personally like doing this, though it will break some stuff, so you probably shouldn't use it
+#+BEGIN_SRC emacs-lisp
+(define-key evil-insert-state-map (kbd "C-c") 'evil-normal-state)
+(define-key evil-normal-state-map (kbd "C-c") 'evil-normal-state)
+(define-key key-translation-map (kbd "C-c C-c") (kbd "C-g"))
+#+END_SRC
+*** SPC commands
+These are just some doom emacs keybinds I like having
+#+BEGIN_SRC emacs-lisp
+(nvmap :prefix "SPC"
+  "t n"   '(neotree-toggle :which-key "Toggle neotree file viewer")
+  "d n"   '(neotree-dir :which-key "Open directory in neotree"))
+(nvmap :keymaps 'override :prefix "SPC"
+  "SPC"   '(counsel-M-x :which-key "M-x")
+  "."     '(find-file :which-key "Find file") 
+  "c c"   '(compile :which-key "Compile")
+  "f f"   '(dirvish :which-key "Dirvish")
+  "c C"   '(recompile :which-key "Recompile")
+  "h r r" '((lambda () (interactive) (load-file "~/.emacs.d/init.el")) :which-key "Reload emacs config")
+  "t t"   '(toggle-truncate-lines :which-key "Toggle truncate lines"))
+(nvmap :prefix "SPC"
+  "b b"   '(ibuffer :which-key "Ibuffer")
+  "b c"   '(clone-indirect-buffer-other-window :which-key "Clone indirect buffer other window")
+  "b k"   '(kill-current-buffer :which-key "Kill current buffer")
+  "b n"   '(next-buffer :which-key "Next buffer")
+  "b p"   '(previous-buffer :which-key "Previous buffer")
+  "b B"   '(ibuffer-list-buffers :which-key "Ibuffer list buffers")
+  "b K"   '(kill-buffer :which-key "Kill buffer")
+  "r f"   '(dashboard-refresh-buffer :which-key "Refresh buffer"))
+#+END_SRC
 *** Neotree keybinds
 #+BEGIN_SRC emacs-lisp
 ;; just for neotree
@@ -282,10 +325,12 @@ Here we can also just enable org bullets for org files.
 *** Disable quit with evil mode :q and :wq
 #+BEGIN_SRC emacs-lisp
 (defun save-and-kill-this-buffer()
+  "Quits the buffer"
   (interactive)
   (save-buffer)
   (kill-current-buffer))
 (defun quit-buffer()
+  "Quits the buffer"
   (interactive)
   (kill-current-buffer))
 #+END_SRC
@@ -297,6 +342,7 @@ And here are the keybinds
 *** Autopairs
 #+BEGIN_SRC emacs-lisp
 (defun electric-pair ()
+  "Autoconnects a given char with another"
   (interactive)
   (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1)))
 #+END_SRC
