@@ -1,0 +1,354 @@
+* Configure use-package
+** Setup archives
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+  (package-initialize)
+#+END_SRC
+** Ensure installed
+#+BEGIN_SRC emacs-lisp
+(unless (package-installed-p 'use-package)
+(package-refresh-contents)
+(package-install 'use-package))
+(eval-and-compile
+(setq use-package-always-ensure t
+    use-package-expand-minimally t))
+#+END_SRC
+* Installing packages
+** Evil Mode
+I'm using both Evil and Evil collection, as it's better than just evil.
+We will enable some configurations, thus making it a bit better.
+#+BEGIN_SRC emacs-lisp
+(use-package evil
+  :ensure t
+  :init
+  (setq evil-want-keybinding nil)
+  (setq evil-vsplit-window-right t)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-split-window-below t)
+  (evil-mode))
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+#+END_SRC
+** Themes
+I typically use the Dracula theme, but its good to mix.
+#+BEGIN_SRC emacs-lisp
+(use-package dracula-theme
+  :ensure t)
+(use-package catppuccin-theme
+  :ensure t)
+(use-package nord-theme
+  :ensure t)
+(use-package doom-themes
+  :ensure t)
+#+END_SRC
+** Dirvish
+Dirvish is my file manager of choice, and it is also based off Dired.
+#+BEGIN_SRC emacs-lisp
+(use-package dirvish
+  :ensure t)
+#+END_SRC
+Here we can also override dired by using this configuration
+#+BEGIN_SRC emacs-lisp
+(dirvish-override-dired-mode)
+#+END_SRC
+** General 
+General gives us some nice features for other packages.
+#+BEGIN_SRC emacs-lisp
+(use-package general
+  :ensure t
+  :config
+  (general-evil-setup t))
+#+END_SRC
+** Neotree
+Neotree is a plugin that gives us a nice little "file manager" on the side of emacs.
+#+BEGIN_SRC emacs-lisp
+(use-package neotree
+  :ensure t)
+#+END_SRC
+Here we can enable some nice defaults
+#+BEGIN_SRC emacs-lisp
+(setq neo-smart-open t
+  neo-window-width 35
+  neo-theme (if (display-graphic-p) 'icons 'arrow)
+  inhibit-compacting-font-caches t
+  projectile-switch-project-action 'neotree-projectile-action) 
+  (add-hook 'neo-after-create-hook
+    #'(lambda (_)
+      (with-current-buffer (get-buffer neo-buffer-name)
+      (setq truncate-lines t)
+      (setq word-wrap nil)
+      (make-local-variable 'auto-hscroll-mode)
+      (setq auto-hscroll-mode nil)))))
+(defcustom neo-window-width 25
+  :type 'integer
+  :group 'neotree)
+(setq-default neo-show-hidden-files t)
+#+END_SRC
+** Treesitter
+#+BEGIN_SRC emacs-lisp
+(use-package tree-sitter
+  :ensure t)
+(use-package tree-sitter-langs
+  :ensure t)
+#+END_SRC
+** Dashboard
+Here I'll just do all the configurations inside the init block.
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "help, emacs stole my family")
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.emacs.d/.local/logo.png")  ;; use custom image as banner
+  (setq dashboard-center-content t) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 3)
+                          (projects . 3)))
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+			      (bookmarks . "book"))))
+#+END_SRC
+
+** Everything for a better M-x
+#+BEGIN_SRC emacs-lisp
+(use-package smex
+  :ensure t
+  :config
+  (smex-initialize))
+(use-package vertico
+  :ensure t
+  :bind (:map vertico-map
+	      ("C-j" . vertico-next)
+	      ("C-k" . vertico-previous)
+	      ("C-f" . vertico-exit))
+  :custom
+  (vertico-cycle t)
+  :init
+  (vertico-mode))
+(use-package marginalia
+  :after vertico
+  :ensure t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
+(use-package haskell-mode
+  :ensure t)
+#+END_SRC
+** Terminal
+I prefer vterm
+#+BEGIN_SRC emacs-lisp
+(use-package vterm
+    :ensure t)
+#+END_SRC
+** Which-key
+Which key helps with 'definitions' for functions
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+    :config
+    (which-key-mode))
+#+END_SRC
+** Writing plugins
+#+BEGIN_SRC emacs-lisp
+(use-package sublimity
+  :ensure t
+  :config
+  (sublimity-mode 1))
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+(use-package emojify
+  :hook (after-init . global-emojify-mode))
+(use-package writegood-mode
+  :ensure t)
+#+END_SRC
+** Code improvements
+#+BEGIN_SRC emacs-lisp
+(use-package auto-complete
+  :ensure t
+  :init
+  (progn
+    (ac-config-default)
+    (global-auto-complete-mode t)
+  ))
+(use-package yasnippet
+  :ensure t)
+(use-package haskell-mode
+  :ensure t)
+#+END_SRC
+** Org plugins
+#+BEGIN_SRC emacs-lisp
+(use-package org-bullets)
+(use-package ox-asciidoc
+  :ensure t)
+#+END_SRC
+Here we can also just enable org bullets for org files.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+END_SRC
+* Configurations
+** General configurations
+*** Disable backup files
+#+BEGIN_SRC emacs-lisp
+(setq make-backup-files nil) 
+#+END_SRC
+*** Disabling bars
+#+BEGIN_SRC emacs-lisp
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(tab-bar-mode -1)
+(scroll-bar-mode -1) 
+#+END_SRC
+*** Setting Font and themes
+#+BEGIN_SRC emacs-lisp
+(setq doom-themes-enable-bold t
+	doom-themes-enable-italic t)
+(load-theme 'dracula t)
+(add-to-list 'default-frame-alist '(font . "Inconsolata-17"))
+#+END_SRC
+*** Setting warning level
+#+BEGIN_SRC emacs-lisp
+(setq warning-minimum-level :emergency)
+#+END_SRC
+*** Line numbers
+#+BEGIN_SRC emacs-lisp
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+(setq display-line-numbers-type 'relative)
+#+END_SRC
+*** Load dashboard with emacsclient
+#+BEGIN_SRC emacs-lisp
+(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+#+END_SRC
+*** Set temp directory
+#+BEGIN_SRC emacs-lisp
+(setq temporary-file-directory "~/.tmp/")
+ (setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+#+END_SRC
+**** Here we will also set auto save to nil
+#+BEGIN_SRC emacs-lisp
+(setq auto-save-default nil)
+#+END_SRC
+*** Yasnippet and treesitter
+#+BEGIN_SRC emacs-lisp
+(yas-global-mode 1)
+(tree-sitter-require 'cpp)
+(tree-sitter-require 'c)
+(tree-sitter-require 'haskell)
+(global-tree-sitter-mode)
+(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+#+END_SRC
+*** Vim like insert TABs
+#+BEGIN_SRC emacs-lisp
+(define-key evil-insert-state-map (kbd "TAB") 'tab-to-tab-stop)      
+#+END_SRC
+*** Tabs
+#+BEGIN_SRC emacs-lisp
+(setq-default indent-tabs-mode nil)
+(setq-default tab-width 4)
+(setq indent-line-function 'insert-tab)
+#+END_SRC
+** General Keybinds
+*** Neotree keybinds
+#+BEGIN_SRC emacs-lisp
+;; just for neotree
+(evil-define-key 'normal neotree-mode-map (kbd "TAB") 'neotree-enter)
+(evil-define-key 'normal neotree-mode-map (kbd "SPC") 'neotree-quick-look)
+(evil-define-key 'normal neotree-mode-map (kbd "q") 'neotree-hide)
+(evil-define-key 'normal neotree-mode-map (kbd "RET") 'neotree-enter)
+(evil-define-key 'normal neotree-mode-map (kbd "g") 'neotree-refresh)
+(evil-define-key 'normal neotree-mode-map (kbd "n") 'neotree-next-line)
+(evil-define-key 'normal neotree-mode-map (kbd "p") 'neotree-previous-line)
+(evil-define-key 'normal neotree-mode-map (kbd "A") 'neotree-stretch-toggle)
+(evil-define-key 'normal neotree-mode-map (kbd "H") 'neotree-hidden-file-toggle)
+(evil-define-key 'normal neotree-mode-map (kbd "w") 'neotree-create-node)
+#+END_SRC
+*** Evil mode undo/redo
+#+BEGIN_SRC emacs-lisp
+(define-key evil-normal-state-map "u" 'evil-undo)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+#+END_SRC
+** Custom functions
+*** Disable quit with evil mode :q and :wq
+#+BEGIN_SRC emacs-lisp
+(defun save-and-kill-this-buffer()
+  (interactive)
+  (save-buffer)
+  (kill-current-buffer))
+(defun quit-buffer()
+  (interactive)
+  (kill-current-buffer))
+#+END_SRC
+And here are the keybinds
+#+BEGIN_SRC emacs-lisp
+(evil-ex-define-cmd "wq" 'save-and-kill-this-buffer)
+(evil-ex-define-cmd "q" 'quit-buffer)
+#+END_SRC
+*** Autopairs
+#+BEGIN_SRC emacs-lisp
+(defun electric-pair ()
+  (interactive)
+  (if (eolp) (let (parens-require-spaces) (insert-pair)) (self-insert-command 1)))
+#+END_SRC
+And here are the hooks we define.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'c-mode-hook
+          (lambda ()
+            (define-key c-mode-map "\"" 'electric-pair)
+            (define-key c-mode-map "\'" 'electric-pair)
+            (define-key c-mode-map "(" 'electric-pair)
+            (define-key c-mode-map "[" 'electric-pair)
+            (define-key c-mode-map "{" 'electric-pair)))
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (define-key lisp-mode-map "\"" 'electric-pair)
+            (define-key lisp-mode-map "\'" 'electric-pair)
+            (define-key lisp-mode-map "(" 'electric-pair)
+            (define-key lisp-mode-map "[" 'electric-pair)
+            (define-key lisp-mode-map "{" 'electric-pair)))
+(add-hook 'scheme-mode-hook
+          (lambda ()
+            (define-key scheme-mode-map "\"" 'electric-pair)
+            (define-key scheme-mode-map "\'" 'electric-pair)
+            (define-key scheme-mode-map "(" 'electric-pair)
+            (define-key scheme-mode-map "[" 'electric-pair)
+            (define-key scheme-mode-map "{" 'electric-pair)))
+(add-hook 'haskell-mode-hook
+          (lambda ()
+            (define-key haskell-mode-map "\"" 'electric-pair)
+            (define-key haskell-mode-map "\'" 'electric-pair)
+            (define-key haskell-mode-map "(" 'electric-pair)
+            (define-key haskell-mode-map "[" 'electric-pair)
+            (define-key haskell-mode-map "{" 'electric-pair)))
+#+END_SRC
+*** Garbage Collection
+#+BEGIN_SRC emacs-lisp
+(defun my-gc-function ()
+  (setq gc-cons-threshold 800000)
+  (defun my-gc-function ()
+    (garbage-collect)))
+#+END_SRC
+And here is the hook for it.
+#+BEGIN_SRC emacs-lisp
+(add-hook 'focus-out-hook #'my-gc-function)
+#+END_SRC
+* Org Configurations
+** Writing Configuration
+#+BEGIN_SRC emacs-lisp
+(add-hook 'org-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'org-indent-mode)
+(add-hook 'org-mode-hook 'writegood-mode)
+#+END_SRC
+
+
+
