@@ -209,6 +209,10 @@ Here we can also just enable org bullets for org files.
 #+END_SRC
 * Configurations
 ** General configurations
+*** Set short answers
+#+BEGIN_SRC emacs-lisp
+(setq use-short-answers t)
+#+END_SRC
 *** Disable backup files
 #+BEGIN_SRC emacs-lisp
 (setq make-backup-files nil)
