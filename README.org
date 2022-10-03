@@ -1,10 +1,10 @@
 * Configure use-package
 ** Setup archives
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
-  (add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-  (package-initialize)
+(require 'package)
+(add-to-list 'package-archives '("gnu"   . "https://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(package-initialize)
 #+END_SRC
 ** Ensure installed
 #+BEGIN_SRC emacs-lisp
@@ -13,7 +13,7 @@
 (package-install 'use-package))
 (eval-and-compile
 (setq use-package-always-ensure t
-    use-package-expand-minimally t))
+  use-package-expand-minimally t))
 #+END_SRC
 * Installing packages
 ** Evil Mode
@@ -152,8 +152,6 @@ Here I'll just do all the configurations inside the init block.
   (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
   :init
   (marginalia-mode))
-(use-package haskell-mode
-  :ensure t)
 #+END_SRC
 ** Terminal
 I prefer vterm
@@ -193,8 +191,6 @@ Which key helps with 'definitions' for functions
     (global-auto-complete-mode t)
   ))
 (use-package yasnippet
-  :ensure t)
-(use-package haskell-mode
   :ensure t)
 #+END_SRC
 ** Org plugins
@@ -399,6 +395,4 @@ And here is the hook for it.
 (add-hook 'org-mode-hook 'org-indent-mode)
 (add-hook 'org-mode-hook 'writegood-mode)
 #+END_SRC
-
-
 
