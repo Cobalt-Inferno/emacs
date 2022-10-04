@@ -115,7 +115,7 @@ Here I'll just do all the configurations inside the init block.
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "help, emacs stole my family")
+  (setq dashboard-banner-logo-title "real programmers use vi")
   ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
   (setq dashboard-startup-banner "~/.emacs.d/.local/logo.png")  ;; use custom image as banner
   (setq dashboard-center-content t) ;; set to 't' for centered content
@@ -202,6 +202,12 @@ Which key helps with 'definitions' for functions
 Here we can also just enable org bullets for org files.
 #+BEGIN_SRC emacs-lisp
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+END_SRC
+** Doom Modeline
+#+BEGIN_SRC emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1))
 #+END_SRC
 * Configurations
 ** General configurations
@@ -321,6 +327,16 @@ These are just some doom emacs keybinds I like having
 (define-key evil-normal-state-map "u" 'evil-undo)
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 #+END_SRC
+** Doom modeline config
+  #+BEGIN_SRC emacs-lisp
+  (setq doom-modeline-time-icon t)
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-buffer-file-name-style 'auto)
+  (setq doom-modeline-buffer-name t)
+  (setq doom-modeline-indent-info nil)
+  (setq doom-modeline-buffer-encoding t)
+  (setq doom-modeline-enable-word-count nil)
+  #+END_SRC
 ** Custom functions
 *** Disable quit with evil mode :q and :wq
 #+BEGIN_SRC emacs-lisp
@@ -369,13 +385,13 @@ And here are the hooks we define.
             (define-key scheme-mode-map "(" 'electric-pair)
             (define-key scheme-mode-map "[" 'electric-pair)
             (define-key scheme-mode-map "{" 'electric-pair)))
-(add-hook 'haskell-mode-hook
-          (lambda ()
-            (define-key haskell-mode-map "\"" 'electric-pair)
-            (define-key haskell-mode-map "\'" 'electric-pair)
-            (define-key haskell-mode-map "(" 'electric-pair)
-            (define-key haskell-mode-map "[" 'electric-pair)
-            (define-key haskell-mode-map "{" 'electric-pair)))
+;;(add-hook 'haskell-mode-hook
+ ;;         (lambda ()
+  ;;          (define-key haskell-mode-map "\"" 'electric-pair)
+   ;;         (define-key haskell-mode-map "\'" 'electric-pair)
+    ;;        (define-key haskell-mode-map "(" 'electric-pair)
+     ;;       (define-key haskell-mode-map "[" 'electric-pair)
+      ;;      (define-key haskell-mode-map "{" 'electric-pair)))
 #+END_SRC
 *** Garbage Collection
 #+BEGIN_SRC emacs-lisp
